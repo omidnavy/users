@@ -8,8 +8,6 @@ const config = require('./config/database').development;
 const BaseModel = require('./BaseModel');
 
 const createPool = () => {
-    console.log(config);
-    console.log({...config, ...{connectionLimit: 10, supportBigNumbers: true}})
     let pool = mysql.createPool({...config, ...{connectionLimit: 10, supportBigNumbers: true}});
     if (pool) {
         pool.on('error', (e) => {
@@ -18,6 +16,7 @@ const createPool = () => {
         return pool
     }
 };
+
 const getConnection = (callback) => {
     pool.getConnection((e, connection) => {
         if (e) {
@@ -25,13 +24,13 @@ const getConnection = (callback) => {
             reconnect();
             return callback(true)
         }
-
-        connection.on('error', (e) => {
-            logger('error', e);
-            connection.release()
-        });
+        connection.on('error',onConnectionError);
         return callback(false, connection);
     })
+};
+
+const onConnectionError = (e) => {
+    logger('error', e);
 };
 
 const reconnect = () => {
@@ -62,6 +61,7 @@ module.exports = class BaseDBModel extends BaseModel {
                     return reject(true)
                 }
                 let q = connection.query(query, items, (e, results) => {
+                    connection.removeListener('error',onConnectionError);
                     connection.release();
                     if (e) {
                         logger('error', e);

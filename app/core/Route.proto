@@ -1,19 +1,48 @@
 syntax = "proto3";
 
-package Hello;
+package Users;
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+service Users {
+    rpc CheckLogin (CheckLoginRequest) returns (CheckLoginReply) {
+    };
+    rpc Register (RegisterRequest) returns (RegisterReply) {
+    };
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+/*Check Login*/
+message CheckLoginRequest {
+    string username = 1;
+    string password = 2;
 }
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
+message CheckLoginReply {
+    bool status = 1;
+    User user = 2;
+
+    message User {
+        int32 ID = 1;
+        int32 Role = 2;
+        int32 RoleID = 3;
+        string Firstname = 4;
+        string Lastname = 5;
+        string Email = 6;
+        string Phone = 7;
+    }
+}
+
+/*Register*/
+message RegisterRequest {
+    string Username = 1;
+    string Email = 2;
+    string Phone = 3;
+    string Password = 4;
+    string Firstname = 5;
+    string Lastname = 6;
+    int32 Role = 8;
+    int32 RoleID = 9;
+}
+
+message RegisterReply {
+    bool status = 1;
+    string msg = 2;
 }

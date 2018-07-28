@@ -2,7 +2,7 @@
 This class will assign your grpc function to its controller main() function.
 ATTENTION: There is no need of modifying this file.
 For every function assigned in your PROTO , you have to make a controller with exact same name of its grpc function with a "Controller" appended to it.
-like: SayHelloController.js for SayHello rpc defined in PROTO.
+like: UserInfoController.js for CheckLogin rpc defined in PROTO.
 Everything else is automated;
  */
 
@@ -23,8 +23,8 @@ const packageDefinition = protoLoader.loadSync(
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const proto = protoDescriptor;
 const server = new grpc.Server();
-const packageName = "Hello";
-const serviceName = "Greeter";
+const packageName = "Users";
+const serviceName = "Users";
 module.exports = class RouteMapper {
     constructor() {
         this.server = server;
