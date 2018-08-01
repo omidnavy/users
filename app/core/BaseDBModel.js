@@ -3,76 +3,57 @@ Simple MYSQL DB Class using pools and basic query function.
 you can extend this class as you need or change it to another DB
  */
 
-const mysql = require('mysql');
+
+const redis = require('redis');
+const client = redis.createClient({host: "192.168.0.7"});
+client.on('connect', () => console.log('redis connected\n'));
+client.on('error', (e) => logger('error', e));
+
+
+const mongojs = require('mongoist');
+const url = "mongodb://192.168.0.7:27017/users";
 const config = require('./config/database').development;
 const BaseModel = require('./BaseModel');
 
-const createPool = () => {
-    let pool = mysql.createPool({...config, ...{connectionLimit: 10, supportBigNumbers: true}});
-    if (pool) {
-        pool.on('error', (e) => {
-            reconnect()
-        });
-        return pool
-    }
-};
-
-const getConnection = (callback) => {
-    pool.getConnection((e, connection) => {
-        if (e) {
-            logger('error', e);
-            reconnect();
-            return callback(true)
-        }
-        connection.on('error',onConnectionError);
-        return callback(false, connection);
-    })
-};
-
+const db = mongojs(url, {useNewUrlParser: true});
 const onConnectionError = (e) => {
     logger('error', e);
 };
+db.on('error', onConnectionError);
 
-const reconnect = () => {
-    pool.end(() => {
-        pool = createPool()
-    })
-};
-let pool = createPool();
+db.on('connect', function () {
+    console.log('database connected')
+});
+// db.dropDatabase()
+(async () => {
+    try {
+        await db.createCollection('users', {autoIndexId: true});
+    }
+    catch (e) {
+        if (e.codeName !== 'NamespaceExists') logger('error', e)
+    }
+    try {
+        await db.users.createIndex({Phone: 1}, {unique: true})
+    }
+    catch (e) {
+        logger('error', e)
+    }
+})();
+
 
 module.exports = class BaseDBModel extends BaseModel {
     constructor() {
-        super()
+        super();
+        this.db = db;
+        this.redis = client;
     }
 
-    /**
-     *
-     * @param {string} query
-     * @param items
-     * @returns {Promise<any>}
-     */
-    query(query, items) {
-        return new Promise((resolve, reject) => {
-            if (typeof items === 'undefined') {
-                items = false;
-            }
-            getConnection((e, connection) => {
-                if (e) {
-                    return reject(true)
-                }
-                let q = connection.query(query, items, (e, results) => {
-                    connection.removeListener('error',onConnectionError);
-                    connection.release();
-                    if (e) {
-                        logger('error', e);
-                        logger('info', q.sql);
-                        return reject(true)
-                    }
-                    return resolve(results)
-                })
-            })
-        })
+    insertUser(user, role, RoleInfo) {
+        return this.db.users.insert({...user, ...role, RoleInfo})
     }
 
+    async doesPhoneExists(phone) {
+        return (await this.db.users.findOne({Phone: phone}))
+    }
 
 };

@@ -52,7 +52,7 @@ Now you're ready to rumble!
 1.  For every rpc function defined in your proto, you must have a component.
     - Create a folder inside `app/components` same as your rpc function name. `eg. SayHello` 
     - Now make a `[x]Controller.js` inside this folder where `x` is your component name. use `/app/components/SayHello/UserInfoController.jsjs` as your template.
-    - You can declare model classes inside your component folder then require it in your controller class. Use `/app/components/SayHello/RegisterModel.js` as your template.
+    - You can declare model classes inside your component folder then require it in your controller class. Use `/app/components/SayHello/Modelyour template.
     - There is a `BaseController` and `BaseModel` class inside `/app/core/` which can have your common things for controllers and models.
     
 1.  Time to run your app:

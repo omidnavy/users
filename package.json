@@ -5,14 +5,16 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./app/app.js",
-    "start:watch" :"nodemon ./app/app.js"
+    "start:watch": "nodemon ./app/app.js"
   },
   "author": "Omid Navy <https://github.com/omidnavy>",
   "license": "ISC",
   "dependencies": {
     "@grpc/proto-loader": "^0.1.0",
     "grpc": "^1.12.4",
+    "mongoist": "^1.7.4",
     "mysql": "^2.15.0",
+    "redis": "^2.8.0",
     "winston": "^3.0.0"
   }
 }

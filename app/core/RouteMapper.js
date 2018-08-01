@@ -46,7 +46,7 @@ module.exports = class RouteMapper {
             }
         });
         this.server.addService(proto[packageName][serviceName].service, route);
-        this.server.bind(`0.0.0.0:${process.argv.slice(2)[0] || '50051'}`, grpc.ServerCredentials.createInsecure());
+        this.server.bind(`0.0.0.0:${process.argv.slice(2)[0] || '50052'}`, grpc.ServerCredentials.createInsecure());
         this.server.start();
     }
 };

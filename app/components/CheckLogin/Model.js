@@ -10,17 +10,15 @@ module.exports = class SayHelloModel extends DatabaseModel {
         super();
     }
 
-    async retrieve(username, password) {
-        let result;
+    async retrieve(phone, password) {
         try {
-            result = await this.query('SELECT ID,Role,RoleID,Firstname,Lastname,Email,Phone FROM Users WHERE (Username = ? AND Password = ?) OR (Phone = ? AND Password = ?) OR (Email = ? AND Password = ?) ', [username, password, username, password, username, password]);
-            if (result.length < 1) result = false;
-            else result = result[0]
+            return await this.db.users.findOne({Phone: phone, Password: password});
         }
         catch (e) {
-            result = false;
+            logger('error',e);
+            return null
         }
-        return (result);
+
     }
 };
 

@@ -22,4 +22,4 @@ module.exports = class CheckLoginController extends BaseController {
 
 
     }
-}
+};
