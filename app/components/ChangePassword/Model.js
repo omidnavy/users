@@ -15,7 +15,7 @@ module.exports = class Model extends DatabaseModel {
         };
         try {
             let user = await this.db.users.findOne({_id: mongo.ObjectId(id)});
-            if (!user) return ({status: 'error', error: 'bad-user'});
+            if (!user) return ({status: 'error', error: 'not-found'});
 
             if (!user || user.Password !== oldPassword) return ({status: 'error', error: 'wrong-password'});
 

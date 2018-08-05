@@ -1,7 +1,7 @@
 const BaseController = require("../../core/BaseController");
 const Model = require("./Model");
 
-module.exports = class ForgetPasswordController extends BaseController {
+module.exports = class ForgetPasswordRequestController extends BaseController {
     constructor() {
         super();
         this.model = new Model();
@@ -9,9 +9,9 @@ module.exports = class ForgetPasswordController extends BaseController {
 
     main(call, callback) {
         (async () => {
-            let response = await this.model.edit(call.request._id,call.request.oldPassword,call.request.newPassword);
+            let response = await this.model.forgetRequest(call.request.mode, call.request.value);
             if (response.status === 'error') callback(null, {status: false, msg: response.error});
-            else callback(null, {status: true, msg: response.id})
+            else callback(null, response)
         })()
     }
 };

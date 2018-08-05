@@ -2,9 +2,10 @@
 Simple MYSQL DB Class using pools and basic query function.
 you can extend this class as you need or change it to another DB
  */
-
-
+const bluebird = require('bluebird');
 const redis = require('redis');
+bluebird.promisifyAll(redis);
+
 const client = redis.createClient({host: "192.168.0.7"});
 client.on('connect', () => console.log('redis connected\n'));
 client.on('error', (e) => logger('error', e));

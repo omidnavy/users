@@ -9,24 +9,23 @@ module.exports = class Model extends DatabaseModel {
         super();
     }
 
-    async forgetRequest(user) {
+    async forget(id, token, password) {
         try {
-            let user = await this.db.users.findOne({$or:[{Phone:user},{Email:user}]});
-            if (!user) return ({status: 'error', error: 'bad-user'});
-
-            this.redis.setex("omid",10,"navy",()=>{
-                this.redis.get("omid",(e,r)=>{
-                    console.log(r)
-                });
-            });
-
+            let request = await this.redis.getAsync(`forget-${id}`);
+            if (!request) return ({status: 'error', error: 'token-not-exists'});
+            if (request.toString() !== token.toString()) return ({status: 'error', error: 'wrong-token'});
+            let additionalInfo = {
+                modifiedDate: +new Date()
+            };
             let result = await this.db.users.update({
                 _id: mongo.ObjectId(id)
-            }, {$set: {...{Password: newPassword}, ...additionalInfo}});
+            }, {$set: {...{Password: password}, ...additionalInfo}});
             if (result.n === 1 && result.nModified === 1 && result.ok === 1) {
-                return {status: 'success', id: result._id}
+                return {status: true}
             }
+            console.log(await this.redis.delAsync(`forget-${id}`));
             return {status:'error',error:'can not update'}
+
         }
         catch (e) {
             console.log(e)
