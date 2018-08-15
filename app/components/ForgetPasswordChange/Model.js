@@ -20,15 +20,12 @@ module.exports = class Model extends DatabaseModel {
             let result = await this.db.users.update({
                 _id: mongo.ObjectId(id)
             }, {$set: {...{Password: password}, ...additionalInfo}});
-            if (result.n === 1 && result.nModified === 1 && result.ok === 1) {
-                return {status: true}
-            }
-            console.log(await this.redis.delAsync(`forget-${id}`));
-            return {status:'error',error:'can not update'}
+            if (result.n === 1 && result.nModified === 1 && result.ok === 1) return {status: true};
+            return {status: 'error', error: 'can not update'}
 
         }
         catch (e) {
-            console.log(e)
+            logger('error',e)
         }
     }
 

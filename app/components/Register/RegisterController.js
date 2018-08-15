@@ -1,7 +1,7 @@
 const BaseController = require("../../core/BaseController");
-const Model = require("./EditModel");
+const Model = require("./RegisterModel");
 
-module.exports = class EditClientController extends BaseController {
+module.exports = class RegisterController extends BaseController {
     constructor() {
         super();
         this.model = new Model();
@@ -9,7 +9,7 @@ module.exports = class EditClientController extends BaseController {
 
     main(call, callback) {
         (async () => {
-            let response = await this.model.edit(call.request._id,JSON.parse(call.request.user));
+            let response = await this.model.register(call.request.type,JSON.parse(call.request.user));
             if (response.status === 'error') callback(null, {status: false, msg: response.error});
             else callback(null, {status: true, msg: response.id})
         })()

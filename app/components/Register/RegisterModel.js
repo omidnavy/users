@@ -3,25 +3,20 @@ Models may extends the "BaseModel" ,"BaseDBModel" or nothing , depends on you an
  */
 
 const DatabaseModel = require('../../core/BaseDBModel');
+const Client = require('./clientDAL');
 module.exports = class RegisterModel extends DatabaseModel {
 
     constructor() {
         super();
     }
 
-    async register(user) {
+    async register(type, user) {
         if (await this.doesPhoneExists(user.Phone)) return ({status: 'error', error: 'phone exists'});
-
-        let additionalInfo = {
-            registeredDate: +new Date(),
-            status: 1
-        };
+        if (type === 'client') user = Client.prepare(user);
         try {
-            let result = await this.insertUser({...user, ...additionalInfo}, {Role: 'client'}, {});
-            if (result._id) {
-                return {status: 'success', id: result._id}
-            }
-            return {status:'error',error:'can not insert'}
+            let result = await this.db.users.insert(user);
+            if (result._id) return {status: 'success', id: result._id};
+            else return {status: 'error', error: 'can not insert'}
         }
         catch (e) {
             console.log(e)

@@ -28,7 +28,7 @@ module.exports = class Model extends DatabaseModel {
             return {status:'error',error:'can not update'}
         }
         catch (e) {
-            console.log(e)
+            logger('error',e)
         }
     }
 

@@ -49,10 +49,6 @@ module.exports = class BaseDBModel extends BaseModel {
         this.redis = client;
     }
 
-    insertUser(user, role, RoleInfo) {
-        return this.db.users.insert({...user, ...role, RoleInfo})
-    }
-
     async doesPhoneExists(phone) {
         return (await this.db.users.findOne({Phone: phone}))
     }
