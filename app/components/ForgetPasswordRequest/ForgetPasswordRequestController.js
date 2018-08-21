@@ -7,11 +7,9 @@ module.exports = class ForgetPasswordRequestController extends BaseController {
         this.model = new Model();
     }
 
-    main(call, callback) {
-        (async () => {
+    async main(call, callback) {
             let response = await this.model.forgetRequest(call.request.mode, call.request.value);
             if (response.status === 'error') callback(null, {status: false, msg: response.error});
             else callback(null, response)
-        })()
     }
 };

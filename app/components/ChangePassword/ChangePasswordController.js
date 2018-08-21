@@ -7,11 +7,9 @@ module.exports = class ChangePasswordController extends BaseController {
         this.model = new Model();
     }
 
-    main(call, callback) {
-        (async () => {
+    async main(call, callback) {
             let response = await this.model.edit(call.request._id,call.request.oldPassword,call.request.newPassword);
             if (response.status === 'error') callback(null, {status: false, msg: response.error});
             else callback(null, {status: true, msg: response.id})
-        })()
     }
 };

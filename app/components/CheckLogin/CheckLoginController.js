@@ -13,13 +13,9 @@ module.exports = class CheckLoginController extends BaseController {
         this.model = new Model();
     }
 
-    main(call, callback) {
-        (async () => {
+    async main(call, callback) {
             let items = await this.model.retrieve(call.request.username, call.request.password);
             if (items) callback(null, {status: true, user: items});
             else callback(null,{status:false})
-        })()
-
-
     }
 };

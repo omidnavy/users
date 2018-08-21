@@ -7,12 +7,9 @@ module.exports = class EditController extends BaseController {
         this.model = new Model();
     }
 
-    main(call, callback) {
-        (async () => {
-            let response = await this.model.remove(call.request.id);
-            if (response) return callback(null, {status: true});
-            else return callback(null, {status: false});
-
-        })()
+    async main(call, callback) {
+        let response = await this.model.remove(call.request.id);
+        if (response) return callback(null, {status: true});
+        else return callback(null, {status: false});
     }
 };
