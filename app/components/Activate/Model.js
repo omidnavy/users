@@ -9,10 +9,10 @@ module.exports = class EditModel extends DatabaseModel {
         super();
     }
 
-    async remove(user) {
+    async activate(user, status) {
         try {
-            let result = await this.db.users.remove({_id: mongo.ObjectId(user)});
-            return result.ok === 1 && result.deletedCount === 1;
+            let result = await this.db.users.update({_id: mongo.ObjectId(user)}, {$set: {Status: +status}});
+            return (result.n === 1 && result.nModified === 1 && result.ok === 1);
         }
         catch (e) {
             logger('error', e);

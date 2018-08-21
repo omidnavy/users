@@ -19,6 +19,7 @@ module.exports = class EditModel extends DatabaseModel {
         let additionalInfo = {
             modifiedDate: +new Date()
         };
+
         try {
             let result = await this.db.users.update({_id: mongo.ObjectId(id)}, {$set: {...user, ...additionalInfo}});
             if (result.n === 1 && result.nModified === 1 && result.ok === 1) {
