@@ -13,6 +13,7 @@
     "@grpc/proto-loader": "^0.1.0",
     "bluebird": "^3.5.1",
     "grpc": "^1.12.4",
+    "minimist": "^1.2.0",
     "mongoist": "^1.7.4",
     "mysql": "^2.15.0",
     "redis": "^2.8.0",
