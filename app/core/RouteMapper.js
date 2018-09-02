@@ -26,7 +26,7 @@ const server = new grpc.Server();
 const packageName = "Users";
 const serviceName = "Users";
 const argv = require('minimist')(process.argv.slice(2));
-const port = argv.port || '50052';
+const port = argv.grpc || '50052';
 module.exports = class RouteMapper {
     constructor() {
         this.server = server;
